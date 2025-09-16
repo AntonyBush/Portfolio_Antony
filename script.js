@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavbarScroll();
     initParallaxEffect();
     initCounterAnimations();
+    initThemeToggle();
 });
 
 // Navigation functionality
@@ -275,8 +276,8 @@ function initLoadingScreen() {
     loadingScreen.className = 'loading';
     loadingScreen.innerHTML = `
         <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Setting Sail...</div>
+            <div class="loading-thunderbolt"></div>
+            <div class="loading-text">Initializing System...</div>
         </div>
     `;
     document.body.appendChild(loadingScreen);
@@ -513,6 +514,40 @@ fallStyle.textContent = `
     }
 `;
 document.head.appendChild(fallStyle);
+
+// Theme Toggle Functionality
+function initThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('i');
+    
+    // Check for saved theme preference or default to 'light'
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme, themeIcon);
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme, themeIcon);
+        
+        // Add a subtle animation
+        themeToggle.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            themeToggle.style.transform = 'scale(1)';
+        }, 150);
+    });
+}
+
+function updateThemeIcon(theme, icon) {
+    if (theme === 'dark') {
+        icon.className = 'fas fa-sun';
+    } else {
+        icon.className = 'fas fa-moon';
+    }
+}
 
 // Add some fun interactions
 document.addEventListener('click', function(e) {
